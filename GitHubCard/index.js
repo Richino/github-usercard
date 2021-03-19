@@ -1,3 +1,70 @@
+import axios from "axios";
+//declare variables
+var result = axios.get("https://api.github.com/users/Richino");
+var container = document.querySelector(".cards");
+const followersArray = [
+	"tetondan",
+	"dustinmyers",
+	"justsml ",
+	"luishrd",
+	"bigknell",
+];
+//data from my personal github
+result.then((results) => {
+	let cards = myProfile(results);
+	container.appendChild(cards);
+});
+//data from other github
+followersArray.forEach((e) => {
+	let followers = axios.get(`https://api.github.com/users/${e}`);
+	followers.then((results) => {
+		let cards = myProfile(results);
+		container.appendChild(cards);
+	});
+});
+
+function myProfile(file) {
+	//declare variables to create tags
+	const card = document.createElement("div");
+	const image = document.createElement("img");
+	const cardInfo = document.createElement("div");
+	const name = document.createElement("h3");
+	const username = document.createElement("p");
+	const location = document.createElement("p");
+	const profile = document.createElement("p");
+	const followers = document.createElement("p");
+	const following = document.createElement("p");
+	const bio = document.createElement("p");
+	const link = document.createElement("a");
+	//create class for said tags
+	card.className = "card";
+	name.classList = "name";
+	cardInfo.className = "card-info";
+	username.classList = "username";
+	//add text to tags
+	image.src = file.data.avatar_url;
+	name.innerHTML = file.data.login;
+	username.innerHTML = file.data.name;
+	location.innerHTML = file.data.location;
+	link.innerHTML = file.data.url;
+	followers.innerHTML = file.data.followers;
+	following.innerHTML = file.data.following;
+	bio.innerHTML = file.data.bio;
+	//display elements to dom
+	card.appendChild(cardInfo);
+	card.appendChild(image);
+	cardInfo.appendChild(name);
+	cardInfo.appendChild(username);
+	cardInfo.appendChild(location);
+	cardInfo.appendChild(profile);
+	profile.appendChild(link);
+	cardInfo.appendChild(followers);
+	cardInfo.appendChild(following);
+	cardInfo.appendChild(bio);
+	//return parent element
+	return card;
+}
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
@@ -28,8 +95,6 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
@@ -54,7 +119,7 @@ const followersArray = [];
   List of LS Instructors Github username's:
     tetondan
     dustinmyers
-    justsml
+    justsml 
     luishrd
     bigknell
 */
